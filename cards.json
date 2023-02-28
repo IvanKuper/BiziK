@@ -1,0 +1,43 @@
+[{
+  "_id": {
+    "$oid": "6352a6997a299d1812e0c8a5"
+  },
+  "business_name": "BiziK",
+  "business_desc": "BiziK",
+  "business_adress": "Tel-Aviv",
+  "business_phone": "035555555",
+  "business_image": "https://www.bizikmedia.com/wp-content/uploads/2021/07/bizik_negatif-scaled.jpg",
+  "card_id": 144699,
+  "user_id": {
+    "$oid": "6352a62d7a299d1812e0c8a3"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6357a275d02ed2bc557c09f1"
+  },
+  "business_name": "sadsadas",
+  "business_desc": "sadasdasd",
+  "business_adress": "asdasdasd",
+  "business_phone": "0555555555",
+  "business_image": "https://cdn.pixabay.com/photo/2020/02/26/07/12/mockup-4880849__340.jpg",
+  "card_id": 633891,
+  "user_id": {
+    "$oid": "6357a237d02ed2bc557c09ef"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6358dbcfd02ed2bc557c0db5"
+  },
+  "business_name": "BiziK",
+  "business_desc": "BiziK Company",
+  "business_adress": "Tel-Aviv",
+  "business_phone": "0555557777",
+  "business_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh8UCTVs3hy8jWdPk0WzgFbpmNfJXE1KGAkA&usqp=CAU",
+  "card_id": 34165,
+  "user_id": {
+    "$oid": "6352925e7a299d1812e0c7ca"
+  },
+  "__v": 0
+}]

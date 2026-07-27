@@ -10,23 +10,59 @@ import Newcard from "./components/Newcard";
 import Mycards from "./components/Mycards";
 import Editcard from "./components/Editcard";
 import Profile from "./components/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <div className="App">
-      <ToastContainer theme="dark" />
+      <ToastContainer theme="colored" position="top-right" />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="signin" element={<Signin />} />
           <Route path="signup" element={<Signup />} />
-          <Route path="all-cards" element={<Allcards />} />
-          <Route path="new-card" element={<Newcard />} />
-          <Route path="profile" element={<Profile />} />
+          <Route
+            path="all-cards"
+            element={
+              <ProtectedRoute>
+                <Allcards />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="new-card"
+            element={
+              <ProtectedRoute bizOnly>
+                <Newcard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="my-cards">
-            <Route index element={<Mycards />} />
-            <Route path="edit/:id" element={<Editcard />} />
+            <Route
+              index
+              element={
+                <ProtectedRoute bizOnly>
+                  <Mycards />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="edit/:id"
+              element={
+                <ProtectedRoute bizOnly>
+                  <Editcard />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </Router>

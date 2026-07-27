@@ -7,18 +7,31 @@ import { useFormik } from "formik";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Card } from "../interfaces/Card";
+import { AlertCircle, SquarePen } from "lucide-react";
 
 interface EditcardProps {}
 
-const Editcard: FunctionComponent<EditcardProps> = () => {
-  const { id } = useParams();
-  const [card, setCard] = useState({
+const fields: { name: keyof ReturnType<typeof getInitial>; label: string }[] = [
+  { name: "business_name", label: "Name" },
+  { name: "business_desc", label: "Description" },
+  { name: "business_adress", label: "Adress" },
+  { name: "business_phone", label: "Phone" },
+  { name: "business_image", label: "Image" },
+];
+
+function getInitial() {
+  return {
     business_name: "",
     business_desc: "",
     business_adress: "",
     business_phone: "",
     business_image: "",
-  });
+  };
+}
+
+const Editcard: FunctionComponent<EditcardProps> = () => {
+  const { id } = useParams();
+  const [card, setCard] = useState(getInitial());
 
   useEffect(() => {
     getCardById(id as string)
@@ -62,126 +75,51 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
   return (
     <>
       <Navbar />
-      <h1 className="text-center mt-3">
-        <i className="fa-regular fa-pen-to-square"></i> Edit BizCard
-      </h1>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-lg-12 mt-1">
-            {/* FORM */}
-            <form onSubmit={formik.handleSubmit}>
-              <div className="form-floating mb-3 w-75 mx-auto">
-                <input
-                  id="business_name"
-                  type="text"
-                  className="form-control "
-                  placeholder="Name"
-                  name="business_name"
-                  value={formik.values.business_name}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.business_name && formik.errors.business_name ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.business_name}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingInput">Name</label>
-              </div>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+        <div className="mx-auto max-w-xl px-4 py-10">
+          <h1 className="mb-6 flex items-center justify-center gap-2 text-center text-2xl font-bold text-slate-800 dark:text-slate-100">
+            <SquarePen size={24} /> Edit BizCard
+          </h1>
+          <div className="animate-fade-in rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-900 sm:p-8">
+            <form onSubmit={formik.handleSubmit} className="space-y-4">
+              {fields.map((field) => (
+                <div key={field.name}>
+                  <label
+                    htmlFor={field.name}
+                    className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300"
+                  >
+                    {field.label}
+                  </label>
+                  <input
+                    id={field.name}
+                    type="text"
+                    className={`w-full rounded-lg border px-3 py-2.5 text-slate-800 outline-none transition-colors focus:ring-2 focus:ring-primary-500 dark:bg-slate-800 dark:text-slate-100 ${
+                      formik.touched[field.name] && formik.errors[field.name]
+                        ? "border-red-400"
+                        : "border-slate-300 dark:border-slate-700"
+                    }`}
+                    placeholder={field.label}
+                    name={field.name}
+                    value={formik.values[field.name]}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched[field.name] && formik.errors[field.name] ? (
+                    <p className="mt-1.5 flex items-center gap-1 text-sm text-red-500">
+                      <AlertCircle size={14} />
+                      {formik.errors[field.name]}
+                    </p>
+                  ) : null}
+                </div>
+              ))}
 
-              <div className="form-floating mb-3 w-75 mx-auto">
-                <input
-                  id="business_desc"
-                  type="text"
-                  className="form-control "
-                  placeholder="Description"
-                  name="business_desc"
-                  value={formik.values.business_desc}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.business_desc && formik.errors.business_desc ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.business_desc}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingInput">Description</label>
-              </div>
-
-              <div className="form-floating mb-3 w-75 mx-auto">
-                <input
-                  id="business_adress"
-                  type="text"
-                  className="form-control "
-                  placeholder="Adress"
-                  name="business_adress"
-                  value={formik.values.business_adress}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.business_adress &&
-                formik.errors.business_adress ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.business_adress}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingInput">Adress</label>
-              </div>
-
-              <div className="form-floating mb-3 w-75 mx-auto">
-                <input
-                  id="business_phone"
-                  type="text"
-                  className="form-control "
-                  placeholder="Phone"
-                  name="business_phone"
-                  value={formik.values.business_phone}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.business_phone &&
-                formik.errors.business_phone ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.business_phone}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingInput">Phone</label>
-              </div>
-
-              <div className="form-floating mb-3 w-75 mx-auto">
-                <input
-                  id="business_image"
-                  type="text"
-                  className="form-control "
-                  placeholder="Image"
-                  name="business_image"
-                  value={formik.values.business_image}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.business_image &&
-                formik.errors.business_image ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.business_image}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingInput">Image</label>
-              </div>
-
-              <div className="button mx-auto">
-                <button
-                  disabled={!(formik.isValid && formik.dirty)}
-                  type="submit"
-                  className="btn btn-dark w-75  mt-1"
-                >
-                  Edit Card
-                </button>
-              </div>
+              <button
+                disabled={!(formik.isValid && formik.dirty)}
+                type="submit"
+                className="w-full rounded-lg bg-primary-600 py-2.5 font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Edit Card
+              </button>
             </form>
           </div>
         </div>

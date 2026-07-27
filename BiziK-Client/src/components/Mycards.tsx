@@ -6,6 +6,15 @@ import { errorMsg, successMsg } from "../services/feedbackService";
 import { getBiz } from "../services/userService";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import QrModal from "./QrModal";
+import {
+  Contact,
+  ExternalLink,
+  Pencil,
+  QrCode,
+  Search,
+  Trash2,
+} from "lucide-react";
 
 interface MycardsProps {}
 
@@ -13,7 +22,7 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
   const [isBiz, setIsBiz] = useState<boolean>(false);
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
-  const [cards, setCards] = useState<Card[]>([]);
+  const [qrCard, setQrCard] = useState<Card | null>(null);
   const handleDelete = (card: Card) => {
     if (window.confirm(`${card.business_name} will be deleted, are you sure?`))
       deleteCard(card)
@@ -36,116 +45,132 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
         errorMsg("Something went wrong");
       });
   }, [isChanged]);
+
+  const filteredCards = card.filter((c) => {
+    const q = search.toLocaleLowerCase();
+    if (q === "") return true;
+    return (
+      c.business_name.toLocaleLowerCase().includes(q) ||
+      c.business_desc.toLocaleLowerCase().includes(q) ||
+      c.business_adress.toLocaleLowerCase().includes(q)
+    );
+  });
+
   return (
     <>
       <Navbar />
-      <h1 className="text-center mt-3">
-        <i className="fa-solid fa-address-card"></i> My BiziK Cards
-        <span style={{ color: "#F4A261" }}>
-          {" "}
-          <br /> [# of cards {card.length}]
-        </span>
-      </h1>
-      <div className="container-fluid _AllCards w-75 mb-5">
-        <div className="row allCards">
-          {/* Search Input */}
-          <div className="input-group mx-auto mb-1 w-75">
-            <span className="input-group-text" id="basic-addon1">
-              <i className="fa-brands fa-searchengin"></i>
-            </span>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+        <div className="mx-auto max-w-6xl px-4 py-10">
+          <h1 className="mb-1 flex flex-wrap items-center justify-center gap-2 text-center text-2xl font-bold text-slate-800 dark:text-slate-100">
+            <Contact size={26} /> My BiziK Cards
+          </h1>
+          <p className="mb-6 text-center text-sm font-medium text-primary-600 dark:text-primary-400">
+            [# of cards {card.length}]
+          </p>
+
+          <div className="relative mx-auto mb-8 max-w-md">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={18}
+            />
             <input
               onChange={(e) => setSearch(e.target.value)}
               type="text"
-              className="form-control "
-              placeholder="Search Card Name"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
+              className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-slate-800 outline-none transition-colors focus:ring-2 focus:ring-primary-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+              placeholder="Search Card Name, Description or Address"
             />
           </div>
-          {card.length ? (
-            card
-              .filter((card) => {
-                return search.toLocaleLowerCase() == ""
-                  ? card
-                  : card.business_name.toLocaleLowerCase().includes(search);
-              })
-              .map((card: Card) => {
-                return (
-                  <div key={card.card_id} className="col-lg-4 card bizCard">
-                    <div className="top">
-                      <div className="col-lg-11 text-center mx-2">
-                        <img
-                          src={card.business_image}
-                          className="card-img-top mx-auto"
-                          alt="Biz Image"
-                        />
-                      </div>
-                      {/* Edit / Delete */}
-                      {isBiz ? (
-                        <div className="col-lg-0">
-                          <div className="">
-                            <ul className="menu">
-                              <button className="btn btn-dark w-100">
-                                <Link className="item" to={`edit/${card._id}`}>
-                                  <i className="fa-regular fa-pen-to-square"></i>{" "}
-                                </Link>
-                              </button>
-                              <button className="btn btn-danger w-100">
-                                <div
-                                  onClick={() => handleDelete(card)}
-                                  className="item"
-                                >
-                                  <i className="fa-regular fa-trash-can"></i>
-                                </div>
-                              </button>
-                            </ul>
-                          </div>
-                        </div>
-                      ) : null}
+
+          {filteredCards.length ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredCards.map((card: Card) => (
+                <div
+                  key={card.card_id}
+                  className="animate-fade-in relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:bg-slate-900"
+                >
+                  <div className="flex h-44 items-center justify-center bg-slate-100 dark:bg-slate-800">
+                    <img
+                      src={card.business_image}
+                      className="h-full w-full object-contain p-4"
+                      alt={card.business_name}
+                    />
+                  </div>
+
+                  {isBiz ? (
+                    <div className="absolute right-3 top-3 flex gap-2">
+                      <Link
+                        to={`edit/${card._id}`}
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/80 text-white shadow transition-colors hover:bg-slate-900"
+                        aria-label="Edit card"
+                      >
+                        <Pencil size={15} />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(card)}
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-red-600/90 text-white shadow transition-colors hover:bg-red-600"
+                        aria-label="Delete card"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  ) : null}
+
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="text-center text-lg font-bold text-slate-800 dark:text-slate-100">
+                      {card.business_name}
+                    </h3>
+
+                    <div className="my-3 flex justify-center gap-2">
+                      <a
+                        href="https://ivankuper.netlify.app/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+                      >
+                        <ExternalLink size={14} /> Visit Website
+                      </a>
+                      <button
+                        onClick={() => setQrCard(card)}
+                        className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                        aria-label="Share via QR code"
+                      >
+                        <QrCode size={16} />
+                      </button>
                     </div>
 
-                    <div className="card-body overflow">
-                      <h3 className="card-title text-center">
-                        {card.business_name}
-                      </h3>
-                      <div className="button mx-auto">
-                        <button type="submit" className="btn btn-warning w-50 ">
-                          <a
-                            href="https://ivankuper.netlify.app/"
-                            target="_blank"
-                          >
-                            Visit Our Website
-                          </a>
-                        </button>
-                      </div>
-                      <hr />
-                      <div className="card-text mb-1 mt-1 text-center">
-                        {card.business_desc}
-                      </div>
-                      <hr />
-                      <div className="card-text mb-1 text-center">
-                        {card.business_phone}
-                      </div>
-                      <hr />
-                      <div className="card-text mb-1 text-center">
-                        {card.business_adress}
-                      </div>
-                    </div>
+                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <p className="my-2 text-center text-sm text-slate-600 dark:text-slate-300">
+                      {card.business_desc}
+                    </p>
+                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <p className="my-2 text-center text-sm text-slate-600 dark:text-slate-300">
+                      {card.business_phone}
+                    </p>
+                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-300">
+                      {card.business_adress}
+                    </p>
                   </div>
-                );
-              })
+                </div>
+              ))}
+            </div>
           ) : (
-            <>
-              <h4 className="text-center mt-5">No Cards Added Yet...</h4>
-              <img
-                className="image mx-auto img-fluid mt-5"
-                src="nocards.png"
-                alt=""
-              />
-            </>
+            <div className="flex flex-col items-center">
+              <h4 className="mt-5 text-center text-lg font-medium text-slate-600 dark:text-slate-300">
+                No Cards Added Yet...
+              </h4>
+              <img className="mt-5 max-w-xs" src="nocards.png" alt="" />
+            </div>
           )}
         </div>
       </div>
+      {qrCard ? (
+        <QrModal
+          value={qrCard.business_phone}
+          title={qrCard.business_name}
+          onClose={() => setQrCard(null)}
+        />
+      ) : null}
       <Footer />
     </>
   );

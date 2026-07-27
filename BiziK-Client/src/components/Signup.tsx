@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { User } from "../interfaces/User";
 import { signup } from "../services/userService";
 import { errorMsg, successMsg } from "../services/feedbackService";
+import { AlertCircle, UserPlus } from "lucide-react";
 
 interface SignupProps {}
 
@@ -48,110 +49,136 @@ const Signup: FunctionComponent<SignupProps> = () => {
         });
     },
   });
-  return (
-    <>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="rightDiv col-lg-12">
-            <Link className="center" to="/">
-              <img className="big-logo mx-auto mb-5" src="logo.png" alt="" />
-            </Link>
-            <h1 className="text-center ">Create Free Account Now!</h1>
-            <form onSubmit={formik.handleSubmit}>
-              <div className="form-floating w-50 mb-3 mx-auto">
-                <input
-                  id="name"
-                  type="text"
-                  className="form-control"
-                  placeholder="Name..."
-                  name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.name && formik.errors.name ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.name}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingPassword">Name</label>
-              </div>
-              <div className="form-floating mb-3 w-50 mx-auto">
-                <input
-                  id="email"
-                  type="email"
-                  className="form-control "
-                  placeholder="Email"
-                  name="email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.email && formik.errors.email ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.email}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingInput">Email</label>
-              </div>
-              <div className="form-floating mb-3 w-50 mx-auto">
-                <input
-                  id="password"
-                  type="password"
-                  className="form-control"
-                  placeholder="Password"
-                  name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.password && formik.errors.password ? (
-                  <p className="text-danger mt-2">
-                    <i className="fa-solid fa-circle-exclamation mx-1"></i>
-                    {formik.errors.password}
-                  </p>
-                ) : null}
-                <label htmlFor="floatingPassword">Password</label>
-              </div>
 
-              <div className="button mx-auto">
-                <button
-                  disabled={!(formik.isValid && formik.dirty)}
-                  type="submit"
-                  className="btn btn-dark w-50  mt-1"
-                >
-                  Register
-                </button>
-              </div>
-              <div className="form-check form-switch mx-auto mt-4">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  onChange={handleChange}
-                  id="subscribe"
-                  name="subscribe"
-                />
-                <label
-                  className="form-check-label mx-2"
-                  htmlFor="flexSwitchCheckDefault"
-                >
-                  Swipe right if You are business
-                </label>
-              </div>
-              <p className="text-center mt-5">
-                Already have an account?
-                <Link className="link" to="/signin">
-                  Click to Login
-                </Link>
+  const inputClass = (touched?: boolean, error?: string) =>
+    `w-full rounded-lg border px-3 py-2.5 text-slate-800 outline-none transition-colors focus:ring-2 focus:ring-primary-500 dark:bg-slate-800 dark:text-slate-100 ${
+      touched && error
+        ? "border-red-400"
+        : "border-slate-300 dark:border-slate-700"
+    }`;
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-600 via-primary-700 to-violet-800 px-4 py-12">
+      <div className="animate-fade-in w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl dark:bg-slate-900">
+        <Link to="/" className="flex justify-center">
+          <img className="mb-6 w-32" src="logo.png" alt="" />
+        </Link>
+        <h1 className="mb-6 text-center text-2xl font-bold text-slate-800 dark:text-slate-100">
+          Create Free Account Now!
+        </h1>
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="name"
+              className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300"
+            >
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              className={inputClass(formik.touched.name, formik.errors.name)}
+              placeholder="Name..."
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.name && formik.errors.name ? (
+              <p className="mt-1.5 flex items-center gap-1 text-sm text-red-500">
+                <AlertCircle size={14} />
+                {formik.errors.name}
               </p>
-            </form>
+            ) : null}
           </div>
-        </div>
+
+          <div>
+            <label
+              htmlFor="email"
+              className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              className={inputClass(formik.touched.email, formik.errors.email)}
+              placeholder="Email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.email && formik.errors.email ? (
+              <p className="mt-1.5 flex items-center gap-1 text-sm text-red-500">
+                <AlertCircle size={14} />
+                {formik.errors.email}
+              </p>
+            ) : null}
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              className={inputClass(
+                formik.touched.password,
+                formik.errors.password
+              )}
+              placeholder="Password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.password && formik.errors.password ? (
+              <p className="mt-1.5 flex items-center gap-1 text-sm text-red-500">
+                <AlertCircle size={14} />
+                {formik.errors.password}
+              </p>
+            ) : null}
+          </div>
+
+          <button
+            disabled={!(formik.isValid && formik.dirty)}
+            type="submit"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 py-2.5 font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <UserPlus size={18} /> Register
+          </button>
+
+          <label
+            htmlFor="subscribe"
+            className="flex items-center justify-center gap-2 pt-1 text-sm text-slate-600 dark:text-slate-300"
+          >
+            <input
+              className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+              type="checkbox"
+              onChange={handleChange}
+              id="subscribe"
+              name="subscribe"
+            />
+            Swipe right if You are business
+          </label>
+
+          <p className="pt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+            Already have an account?{" "}
+            <Link
+              className="font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400"
+              to="/signin"
+            >
+              Click to Login
+            </Link>
+          </p>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -8,7 +8,7 @@ const api: string = process.env.REACT_APP_API || "";
 export const addCard = (newCard: Card): Promise<any> => {
   return axios.post(`${api}cards`, newCard, {
     headers: {
-      Authorization: `${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
   });
 };

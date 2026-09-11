@@ -18,7 +18,7 @@ export const signin = (values: User): Promise<any> => {
 export const getUser = (): Promise<any> => {
   return axios.get(`${api}profile`, {
     headers: {
-      Authorization: `${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
     },
   });
 };

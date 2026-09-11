@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
   try {
     // Joi Validation
     const { error } = loginSchema.validate(req.body);
-    if (error) return res.status(400).send(error.mesage);
+    if (error) return res.status(400).send(error.message);
 
     // Check if user Exist
     let user = await User.findOne({ email: req.body.email });

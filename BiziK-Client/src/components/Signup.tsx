@@ -38,7 +38,7 @@ const Signup: FunctionComponent<SignupProps> = () => {
         .then((result) => {
           sessionStorage.setItem("token", result.data.token);
           successMsg("You Registered Successfully!");
-          if (checkboxValue == true) {
+          if (checkboxValue === true) {
             navigate("/new-card");
           } else {
             navigate("/all-cards");

@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Card } from "../interfaces/Card";
-import { AlertCircle, SquarePen } from "lucide-react";
+import { AlertCircle, Loader2, SquarePen } from "lucide-react";
 
 interface EditcardProps {}
 
@@ -32,6 +32,8 @@ function getInitial() {
 const Editcard: FunctionComponent<EditcardProps> = () => {
   const { id } = useParams();
   const [card, setCard] = useState(getInitial());
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     getCardById(id as string)
@@ -40,8 +42,9 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
       })
       .catch(() => {
         errorMsg("Something went wrong!");
-      });
-  }, []);
+      })
+      .finally(() => setIsLoading(false));
+  }, [id]);
 
   const navigate = useNavigate();
   const formik = useFormik({
@@ -61,6 +64,7 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
       business_image: yup.string().required("Image is Required"),
     }),
     onSubmit: (values) => {
+      setIsSaving(true);
       let card: Card = { ...values, _id: id };
       editCard(card)
         .then((result) => {
@@ -69,7 +73,8 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
         })
         .catch((err) => {
           errorMsg("Something went wrong!");
-        });
+        })
+        .finally(() => setIsSaving(false));
     },
   });
   return (
@@ -81,7 +86,9 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
             <SquarePen size={24} /> Edit BizCard
           </h1>
           <div className="animate-fade-in rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-900 sm:p-8">
-            <form onSubmit={formik.handleSubmit} className="space-y-4">
+            {isLoading ? (
+              <div className="flex justify-center py-10"><Loader2 className="animate-spin text-primary-600" size={28} /></div>
+            ) : <form onSubmit={formik.handleSubmit} className="space-y-4">
               {fields.map((field) => (
                 <div key={field.name}>
                   <label
@@ -114,13 +121,13 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
               ))}
 
               <button
-                disabled={!(formik.isValid && formik.dirty)}
+                disabled={!(formik.isValid && formik.dirty) || isSaving}
                 type="submit"
                 className="w-full rounded-lg bg-primary-600 py-2.5 font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Edit Card
+                {isSaving ? <Loader2 className="mx-auto animate-spin" size={18} /> : "Edit Card"}
               </button>
-            </form>
+            </form>}
           </div>
         </div>
       </div>

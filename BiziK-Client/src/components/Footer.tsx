@@ -37,7 +37,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
       </div>
 
       <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-        All rights reserved 2022 ©{" "}
+        All rights reserved {new Date().getFullYear()} ©{" "}
         <a
           className="font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
           href="https://ivankuper.netlify.app/"

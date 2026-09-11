@@ -9,16 +9,17 @@ const auth = require("../middlewares/auth");
 
 // Card Joi Validation Schema
 const cardSchema = joi.object({
-  business_name: joi.string().required().min(2),
-  business_desc: joi.string().required().min(2),
-  business_adress: joi.string().required().min(2),
+  business_name: joi.string().trim().required().min(2).max(120),
+  business_desc: joi.string().trim().required().min(2).max(1000),
+  business_adress: joi.string().trim().required().min(2).max(240),
   business_phone: joi
     .string()
+    .trim()
     .required()
     .min(9)
     .max(12)
     .regex(/^0[2-9]\d{7,8}$/),
-  business_image: joi.string().required(),
+  business_image: joi.string().trim().required().max(2000000),
 });
 
 // Random Card ID
@@ -35,7 +36,7 @@ router.post("/", auth, async (req, res) => {
   try {
     // Joi Validation
     const { error } = cardSchema.validate(req.body);
-    if (error) return res(400).send(error.message);
+    if (error) return res.status(400).send(error.message);
 
     // Adding CardID + User_id
     let card = new Card(req.body);

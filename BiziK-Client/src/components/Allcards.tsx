@@ -1,11 +1,11 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Card } from "../interfaces/Card";
 import { getAllCards } from "../services/cardService";
-import { errorMsg } from "../services/feedbackService";
+import { errorMsg, getErrorMessage } from "../services/feedbackService";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import QrModal from "./QrModal";
-import { Contact, ExternalLink, QrCode, Search } from "lucide-react";
+import { Contact, ExternalLink, Loader2, QrCode, Search } from "lucide-react";
 
 interface AllcardsProps {}
 
@@ -13,14 +13,19 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
   const [search, setSearch] = useState<string>("");
   const [cards, setCards] = useState<Card[]>([]);
   const [qrCard, setQrCard] = useState<Card | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
+
   useEffect(() => {
     getAllCards()
       .then((result) => {
         setCards(result.data);
       })
       .catch((err) => {
-        errorMsg("Something went Wrong, Try Agian");
-      });
+        setLoadFailed(true);
+        errorMsg(getErrorMessage(err, "Could not load cards."));
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const filteredCards = cards.filter((card) => {
@@ -58,7 +63,19 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
             />
           </div>
 
-          {filteredCards.length ? (
+          {isLoading ? (
+            <div className="flex justify-center py-16" role="status">
+              <Loader2
+                className="animate-spin text-primary-600"
+                size={32}
+                aria-label="Loading cards"
+              />
+            </div>
+          ) : loadFailed ? (
+            <p className="py-16 text-center text-slate-600 dark:text-slate-300">
+              Could not load cards. Please refresh the page.
+            </p>
+          ) : filteredCards.length ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCards.map((card: Card) => (
                 <div
@@ -115,9 +132,13 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
           ) : (
             <div className="flex flex-col items-center">
               <h4 className="mt-5 text-center text-lg font-medium text-slate-600 dark:text-slate-300">
-                No Cards Added Yet...
+                {cards.length
+                  ? "No cards match your search."
+                  : "No cards have been added yet."}
               </h4>
-              <img className="mt-5 max-w-xs" src="nocards.png" alt="" />
+              {!cards.length ? (
+                <img className="mt-5 max-w-xs" src="nocards.png" alt="" />
+              ) : null}
             </div>
           )}
         </div>

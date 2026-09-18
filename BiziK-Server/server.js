@@ -12,11 +12,22 @@ const login = require("./routes/login");
 const profile = require("./routes/profile");
 const card = require("./routes/card");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use(logger);
-// Enable Cors
-app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  next();
+});
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN
+      ? process.env.CLIENT_ORIGIN.split(",").map((value) => value.trim())
+      : true,
+  })
+);
 
 // EndPoints
 app.use("/api/register", register);

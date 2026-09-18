@@ -10,3 +10,24 @@
 .animate-fade-in {
   animation: fadeInRight 0.4s ease-in-out;
 }
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-float {
+    animation: none;
+  }
+}

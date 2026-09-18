@@ -1,9 +1,12 @@
 module.exports = (req, res, next) => {
-  let method = req.method;
-  let url = req.url;
-  let status = res.statusCode;
-  let log = `METHOD:${method} | URL:${url} | STATUS:${status}`;
-  console.log(log);
+  const startedAt = Date.now();
+
+  res.on("finish", () => {
+    const duration = Date.now() - startedAt;
+    console.log(
+      `METHOD:${req.method} | URL:${req.originalUrl} | STATUS:${res.statusCode} | ${duration}ms`
+    );
+  });
 
   next();
 };

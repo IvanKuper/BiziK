@@ -39,13 +39,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     setUser(Boolean(getBiz()));
   }, []);
 
-  const isLogged = sessionStorage.getItem("token");
+  const isLogged = Boolean(sessionStorage.getItem("token"));
 
   return (
     <nav className="sticky top-0 z-40 bg-gradient-to-r from-primary-700 via-primary-600 to-violet-600 shadow-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <NavLink
-          to="/my-cards"
+          to={isLogged ? "/my-cards" : "/"}
           className="flex items-center gap-2 text-white"
           onClick={() => setMenuOpen(false)}
         >
@@ -85,7 +85,22 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 <LogOut size={16} /> Say Bye
               </button>
             </>
-          ) : null}
+          ) : (
+            <>
+              <NavLink to="/" end className={linkClass}>
+                Home
+              </NavLink>
+              <NavLink to="/about" className={linkClass}>
+                About Bizik
+              </NavLink>
+              <NavLink to="/signin" className={linkClass}>
+                Login
+              </NavLink>
+              <NavLink to="/signup" className={linkClass}>
+                Register
+              </NavLink>
+            </>
+          )}
           <button
             onClick={toggleDark}
             aria-label="Toggle dark mode"
@@ -169,7 +184,39 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 <LogOut size={16} /> Say Bye
               </button>
             </>
-          ) : null}
+          ) : (
+            <>
+              <NavLink
+                to="/"
+                end
+                className={linkClass}
+                onClick={() => setMenuOpen(false)}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to="/about"
+                className={linkClass}
+                onClick={() => setMenuOpen(false)}
+              >
+                About Bizik
+              </NavLink>
+              <NavLink
+                to="/signin"
+                className={linkClass}
+                onClick={() => setMenuOpen(false)}
+              >
+                Login
+              </NavLink>
+              <NavLink
+                to="/signup"
+                className={linkClass}
+                onClick={() => setMenuOpen(false)}
+              >
+                Register
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </nav>

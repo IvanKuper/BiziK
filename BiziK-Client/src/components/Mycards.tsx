@@ -2,7 +2,11 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "../interfaces/Card";
 import { deleteCard, getCardByUserId } from "../services/cardService";
-import { errorMsg, successMsg } from "../services/feedbackService";
+import {
+  errorMsg,
+  getErrorMessage,
+  successMsg,
+} from "../services/feedbackService";
 import { getBiz } from "../services/userService";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
@@ -10,6 +14,7 @@ import QrModal from "./QrModal";
 import {
   Contact,
   ExternalLink,
+  Loader2,
   Pencil,
   QrCode,
   Search,
@@ -31,19 +36,25 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
           successMsg(`${card.business_name} Deleted!`);
         })
         .catch((err) => {
-          errorMsg("Something went wrong");
+          errorMsg(getErrorMessage(err, "Could not delete the card."));
         });
   };
   const [card, setCard] = useState<Card[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   useEffect(() => {
     setIsBiz(getBiz());
+    setIsLoading(true);
+    setLoadFailed(false);
     getCardByUserId()
       .then((result) => {
         setCard(result.data);
       })
       .catch((err) => {
-        errorMsg("Something went wrong");
-      });
+        setLoadFailed(true);
+        errorMsg(getErrorMessage(err, "Could not load your cards."));
+      })
+      .finally(() => setIsLoading(false));
   }, [isChanged]);
 
   const filteredCards = card.filter((c) => {
@@ -81,7 +92,19 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
             />
           </div>
 
-          {filteredCards.length ? (
+          {isLoading ? (
+            <div className="flex justify-center py-16" role="status">
+              <Loader2
+                className="animate-spin text-primary-600"
+                size={32}
+                aria-label="Loading cards"
+              />
+            </div>
+          ) : loadFailed ? (
+            <p className="py-16 text-center text-slate-600 dark:text-slate-300">
+              Could not load your cards. Please refresh the page.
+            </p>
+          ) : filteredCards.length ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCards.map((card: Card) => (
                 <div
@@ -157,9 +180,13 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
           ) : (
             <div className="flex flex-col items-center">
               <h4 className="mt-5 text-center text-lg font-medium text-slate-600 dark:text-slate-300">
-                No Cards Added Yet...
+                {card.length
+                  ? "No cards match your search."
+                  : "No cards have been added yet."}
               </h4>
-              <img className="mt-5 max-w-xs" src="nocards.png" alt="" />
+              {!card.length ? (
+                <img className="mt-5 max-w-xs" src="nocards.png" alt="" />
+              ) : null}
             </div>
           )}
         </div>

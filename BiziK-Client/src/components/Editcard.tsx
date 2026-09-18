@@ -1,7 +1,11 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { editCard, getCardById } from "../services/cardService";
-import { errorMsg, successMsg } from "../services/feedbackService";
+import {
+  errorMsg,
+  getErrorMessage,
+  successMsg,
+} from "../services/feedbackService";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Footer from "./Footer";
@@ -14,7 +18,7 @@ interface EditcardProps {}
 const fields: { name: keyof ReturnType<typeof getInitial>; label: string }[] = [
   { name: "business_name", label: "Name" },
   { name: "business_desc", label: "Description" },
-  { name: "business_adress", label: "Adress" },
+  { name: "business_adress", label: "Address" },
   { name: "business_phone", label: "Phone" },
   { name: "business_image", label: "Image" },
 ];
@@ -40,8 +44,8 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
       .then((result) => {
         setCard(result.data);
       })
-      .catch(() => {
-        errorMsg("Something went wrong!");
+      .catch((err) => {
+        errorMsg(getErrorMessage(err, "Could not load the card."));
       })
       .finally(() => setIsLoading(false));
   }, [id]);
@@ -59,8 +63,11 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
     validationSchema: yup.object({
       business_name: yup.string().required("Name is Required").min(2),
       business_desc: yup.string().required("Description is Required").min(2),
-      business_adress: yup.string().required("Adress is Required").min(2),
-      business_phone: yup.string().required("Phone is Required").min(9).max(12),
+      business_adress: yup.string().required("Address is Required").min(2),
+      business_phone: yup
+        .string()
+        .required("Phone is Required")
+        .matches(/^0[2-9]\d{7,8}$/, "Enter a valid Israeli phone number"),
       business_image: yup.string().required("Image is Required"),
     }),
     onSubmit: (values) => {
@@ -72,7 +79,7 @@ const Editcard: FunctionComponent<EditcardProps> = () => {
           navigate("/all-cards");
         })
         .catch((err) => {
-          errorMsg("Something went wrong!");
+          errorMsg(getErrorMessage(err, "Could not update the card."));
         })
         .finally(() => setIsSaving(false));
     },

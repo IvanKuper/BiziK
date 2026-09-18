@@ -4,7 +4,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { signin } from "../services/userService";
 import { User } from "../interfaces/User";
-import { errorMsg, successMsg } from "../services/feedbackService";
+import {
+  errorMsg,
+  getErrorMessage,
+  successMsg,
+} from "../services/feedbackService";
 import { AlertCircle, LogIn } from "lucide-react";
 
 interface SigninProps {}
@@ -33,7 +37,7 @@ const Signin: FunctionComponent<SigninProps> = () => {
           navigate("/all-cards");
         })
         .catch((err) => {
-          errorMsg("Something went Wrong, Try Agian");
+          errorMsg(getErrorMessage(err, "Could not sign in."));
         });
     },
   });

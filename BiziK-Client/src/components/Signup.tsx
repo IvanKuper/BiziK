@@ -4,7 +4,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { User } from "../interfaces/User";
 import { signup } from "../services/userService";
-import { errorMsg, successMsg } from "../services/feedbackService";
+import {
+  errorMsg,
+  getErrorMessage,
+  successMsg,
+} from "../services/feedbackService";
 import { AlertCircle, UserPlus } from "lucide-react";
 
 interface SignupProps {}
@@ -29,7 +33,15 @@ const Signup: FunctionComponent<SignupProps> = () => {
     validationSchema: yup.object({
       name: yup.string().required().min(2),
       email: yup.string().required().min(6).max(1024).email(),
-      password: yup.string().required().min(8).max(1024),
+      password: yup
+        .string()
+        .required()
+        .min(8)
+        .max(1024)
+        .matches(
+          /^(?=.*[A-Za-z])(?=.*\d).+$/,
+          "Password must include a letter and a number"
+        ),
       biz: yup.boolean(),
     }),
     onSubmit: (values) => {
@@ -45,7 +57,7 @@ const Signup: FunctionComponent<SignupProps> = () => {
           }
         })
         .catch((err) => {
-          errorMsg("Something went Wrong, Try Agian");
+          errorMsg(getErrorMessage(err, "Could not create the account."));
         });
     },
   });

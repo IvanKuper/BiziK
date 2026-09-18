@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { errorMsg } from "../services/feedbackService";
+import { errorMsg, getErrorMessage } from "../services/feedbackService";
 import { getUser } from "../services/userService";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
@@ -20,7 +20,7 @@ const Profile: FunctionComponent<ProfileProps> = () => {
         setUserProfile(result.data);
       })
       .catch((err) => {
-        errorMsg("Something went Wrong, Try Agian");
+        errorMsg(getErrorMessage(err, "Could not load your profile."));
       });
   }, []);
   return (

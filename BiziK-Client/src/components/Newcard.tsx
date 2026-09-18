@@ -4,7 +4,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { addCard } from "../services/cardService";
-import { errorMsg, successMsg } from "../services/feedbackService";
+import {
+  errorMsg,
+  getErrorMessage,
+  successMsg,
+} from "../services/feedbackService";
 import Footer from "./Footer";
 import { AlertCircle, IdCard, Loader2, Upload } from "lucide-react";
 
@@ -13,7 +17,7 @@ interface NewcardProps {}
 const fields: { name: keyof typeof initial; label: string; placeholder: string }[] = [
   { name: "business_name", label: "Name", placeholder: "Business name" },
   { name: "business_desc", label: "Description", placeholder: "Description" },
-  { name: "business_adress", label: "Adress", placeholder: "Adress" },
+  { name: "business_adress", label: "Address", placeholder: "Address" },
   { name: "business_phone", label: "Phone", placeholder: "Phone" },
 ];
 
@@ -33,12 +37,11 @@ const Newcard: FunctionComponent<NewcardProps> = () => {
     validationSchema: yup.object({
       business_name: yup.string().required(" Name is Required").min(2),
       business_desc: yup.string().required(" Description is Required").min(2),
-      business_adress: yup.string().required(" Adress is Required").min(2),
+      business_adress: yup.string().required("Address is Required").min(2),
       business_phone: yup
         .string()
         .required(" Phone is Required")
-        .min(9)
-        .max(12),
+        .matches(/^0[2-9]\d{7,8}$/, "Enter a valid Israeli phone number"),
       business_image: yup.string().required(" Image is Required"),
     }),
     onSubmit: (values) => {
@@ -49,7 +52,7 @@ const Newcard: FunctionComponent<NewcardProps> = () => {
           navigate("/all-cards");
         })
         .catch((err) => {
-          errorMsg("Something went wrong!");
+          errorMsg(getErrorMessage(err, "Could not add the card."));
         })
         .finally(() => {
           setIsSaving(false);

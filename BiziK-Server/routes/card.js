@@ -2,10 +2,10 @@
 const express = require("express");
 const joi = require("joi");
 const { Card } = require("../models/Card");
-const { User } = require("../models/User");
 const router = express.Router();
 const _ = require("lodash");
 const auth = require("../middlewares/auth");
+const bizOnly = require("../middlewares/biz");
 
 // Card Joi Validation Schema
 const cardSchema = joi.object({
@@ -17,7 +17,7 @@ const cardSchema = joi.object({
     .trim()
     .required()
     .min(9)
-    .max(12)
+    .max(10)
     .regex(/^0[2-9]\d{7,8}$/),
   business_image: joi.string().trim().required().max(2000000),
 });
@@ -32,7 +32,7 @@ const randomCardId = async () => {
 };
 
 // Post Card in DB
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, bizOnly, async (req, res) => {
   try {
     // Joi Validation
     const { error } = cardSchema.validate(req.body);
@@ -76,7 +76,7 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 // Edit Card by ID
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, bizOnly, async (req, res) => {
   try {
     const { error } = cardSchema.validate(req.body);
     if (error) return res.status(400).send(error.message);
@@ -94,7 +94,7 @@ router.put("/:id", auth, async (req, res) => {
 });
 
 // Delete Card by Id
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", auth, bizOnly, async (req, res) => {
   try {
     const card = await Card.findOneAndRemove({
       _id: req.params.id,

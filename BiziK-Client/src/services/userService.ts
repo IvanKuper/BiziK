@@ -25,10 +25,22 @@ export const getUser = (): Promise<any> => {
 
 // Get "Biz" payload from token
 export const getBiz = () => {
-  return (jwt_decode(sessionStorage.getItem("token") as string) as any).biz;
+  const token = sessionStorage.getItem("token");
+  if (!token) return false;
+  try {
+    return Boolean((jwt_decode(token) as any).biz);
+  } catch {
+    return false;
+  }
 };
 
 // Get "UserId" payload from token
 export const getUserId = () => {
-  return (jwt_decode(sessionStorage.getItem("token") as string) as any)._id;
+  const token = sessionStorage.getItem("token");
+  if (!token) return "";
+  try {
+    return (jwt_decode(token) as any)._id as string;
+  } catch {
+    return "";
+  }
 };

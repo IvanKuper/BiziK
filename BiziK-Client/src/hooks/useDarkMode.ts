@@ -10,7 +10,7 @@ const getInitialTheme = (): boolean => {
 };
 
 export const useDarkMode = () => {
-  const [isDark, setIsDark] = useState<boolean>(getInitialTheme);
+  const [isDark, setIsDark] = useState<boolean>(() => getInitialTheme());
 
   useEffect(() => {
     const root = document.documentElement;

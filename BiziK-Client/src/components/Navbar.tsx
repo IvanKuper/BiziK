@@ -32,7 +32,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const [user, setUser] = useState<boolean>(false);
 
   useEffect(() => {
-    setUser(getBiz());
+    if (!sessionStorage.getItem("token")) {
+      setUser(false);
+      return;
+    }
+    setUser(Boolean(getBiz()));
   }, []);
 
   const isLogged = sessionStorage.getItem("token");

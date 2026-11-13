@@ -15,8 +15,11 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
   const [qrCard, setQrCard] = useState<Card | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
+  const [isSlow, setIsSlow] = useState(false);
 
   useEffect(() => {
+    // The free server sleeps when idle; say so instead of a silent spinner
+    const slowTimer = setTimeout(() => setIsSlow(true), 3000);
     getAllCards()
       .then((result) => {
         setCards(result.data);
@@ -25,7 +28,11 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
         setLoadFailed(true);
         errorMsg(getErrorMessage(err, "Could not load cards."));
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        clearTimeout(slowTimer);
+        setIsLoading(false);
+      });
+    return () => clearTimeout(slowTimer);
   }, []);
 
   const filteredCards = cards.filter((card) => {
@@ -64,12 +71,21 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center py-16" role="status">
+            <div
+              className="flex flex-col items-center gap-3 py-16"
+              role="status"
+            >
               <Loader2
                 className="animate-spin text-primary-600"
                 size={32}
                 aria-label="Loading cards"
               />
+              {isSlow && (
+                <p className="max-w-sm text-center text-sm text-slate-600 dark:text-slate-300">
+                  Waking up the free server. The first load can take up to a
+                  minute.
+                </p>
+              )}
             </div>
           ) : loadFailed ? (
             <p className="py-16 text-center text-slate-600 dark:text-slate-300">

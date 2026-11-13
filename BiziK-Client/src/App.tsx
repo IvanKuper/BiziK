@@ -22,14 +22,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="signin" element={<Signin />} />
           <Route path="signup" element={<Signup />} />
-          <Route
-            path="all-cards"
-            element={
-              <ProtectedRoute>
-                <Allcards />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="all-cards" element={<Allcards />} />
           <Route
             path="new-card"
             element={

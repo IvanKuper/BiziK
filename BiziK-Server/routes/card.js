@@ -107,10 +107,10 @@ router.delete("/:id", auth, bizOnly, async (req, res) => {
   }
 });
 
-// Find All Cards in DB
-router.get("/", auth, async (req, res) => {
+// Find All Cards in DB (public directory; owner id is not exposed)
+router.get("/", async (req, res) => {
   try {
-    let cards = await Card.find();
+    let cards = await Card.find().select("-user_id -__v");
     res.status(200).send(cards);
   } catch (error) {
     res.status(400).send("Error in get Cards");

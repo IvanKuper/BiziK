@@ -67,11 +67,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               </NavLink>
             </>
           ) : null}
+          <NavLink to="/all-cards" className={linkClass}>
+            All BiziK Cards
+          </NavLink>
           {isLogged ? (
             <>
-              <NavLink to="/all-cards" className={linkClass}>
-                All BiziK Cards
-              </NavLink>
               <NavLink to="/profile" className={linkClass}>
                 My Profile
               </NavLink>
@@ -154,15 +154,15 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               </NavLink>
             </>
           ) : null}
+          <NavLink
+            to="/all-cards"
+            className={linkClass}
+            onClick={() => setMenuOpen(false)}
+          >
+            All BiziK Cards
+          </NavLink>
           {isLogged ? (
             <>
-              <NavLink
-                to="/all-cards"
-                className={linkClass}
-                onClick={() => setMenuOpen(false)}
-              >
-                All BiziK Cards
-              </NavLink>
               <NavLink
                 to="/profile"
                 className={linkClass}

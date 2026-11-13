@@ -15,11 +15,7 @@ export const addCard = (newCard: Card): Promise<any> => {
 
 // Get All Cards
 export const getAllCards = (): Promise<any> => {
-  return axios.get(`${api}cards`, {
-    headers: {
-      Authorization: `${sessionStorage.getItem("token")}`,
-    },
-  });
+  return axios.get(`${api}cards`);
 };
 
 // Get Card by Card ID

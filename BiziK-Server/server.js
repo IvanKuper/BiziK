@@ -36,9 +36,15 @@ app.use("/api/profile", profile);
 app.use("/api/cards", card);
 
 // Connect to MongoDB
-mongoose
-  .connect(process.env.db, { useNewUrlParser: true })
-  .then(() => console.log("Connected To MongoDB"))
-  .catch(() => console.log("Cannot connect to server"));
+if (require.main === module) {
+  mongoose
+    .connect(process.env.db, { useNewUrlParser: true })
+    .then(() => console.log("Connected To MongoDB"))
+    .catch(() => console.log("Cannot connect to server"));
+}
 
-app.listen(PORT, () => console.log("Server Connected to port" + PORT));
+module.exports = app;
+
+if (require.main === module) {
+  app.listen(PORT, () => console.log("Server Connected to port" + PORT));
+}

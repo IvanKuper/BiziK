@@ -34,13 +34,21 @@ app.use("/api/register", register);
 app.use("/api/login", login);
 app.use("/api/profile", profile);
 app.use("/api/cards", card);
+// Lets the client and uptime checks see whether the database is reachable
+app.get("/api/health", (req, res) =>
+  res.json({ ok: true, db: mongoose.connection.readyState === 1 })
+);
 
 // Connect to MongoDB
 if (require.main === module) {
   mongoose
-    .connect(process.env.db, { useNewUrlParser: true })
+    .connect(process.env.db || process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      // Own database name, so several apps can share one free cluster
+      dbName: process.env.DB_NAME || "bizik",
+    })
     .then(() => console.log("Connected To MongoDB"))
-    .catch(() => console.log("Cannot connect to server"));
+    .catch((err) => console.log("Cannot connect to MongoDB:", err.message));
 }
 
 module.exports = app;

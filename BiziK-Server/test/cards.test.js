@@ -48,3 +48,9 @@ test("a regular (non-business) account cannot create a card", async () => {
   });
   assert.equal(res.status, 403);
 });
+
+test("GET /api/health answers without a token and reports the database state", async () => {
+  const res = await fetch(base.replace("/cards", "/health"));
+  assert.equal(res.status, 200);
+  assert.deepEqual(await res.json(), { ok: true, db: false });
+});

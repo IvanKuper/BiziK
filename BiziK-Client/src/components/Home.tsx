@@ -32,12 +32,20 @@ const Home: FunctionComponent<HomeProps> = () => {
               </span>
               <span className="text-2xl font-extrabold tracking-tight">BiziK</span>
             </Link>
+            <div className="flex items-center gap-2">
+            <Link
+              to="/all-cards"
+              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur transition hover:bg-white/10"
+            >
+              Browse cards
+            </Link>
             <Link
               to="/about"
               className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 backdrop-blur transition hover:bg-white/10"
             >
               About BiziK
             </Link>
+            </div>
           </div>
 
           <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-24 pt-14 lg:grid-cols-[1.05fr_.95fr] lg:pt-24">

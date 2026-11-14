@@ -7,7 +7,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
   return (
     <footer
       id="footer"
-      className="mt-10 w-full border-t border-slate-200 bg-white py-6 text-center dark:border-slate-800 dark:bg-slate-900"
+      className="w-full border-t border-slate-200 bg-white py-6 text-center dark:border-slate-800 dark:bg-slate-900"
     >
       <div className="flex items-center justify-center gap-4">
         <a

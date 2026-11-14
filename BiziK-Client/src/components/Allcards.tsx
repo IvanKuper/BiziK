@@ -5,7 +5,8 @@ import { errorMsg, getErrorMessage } from "../services/feedbackService";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import QrModal from "./QrModal";
-import { Contact, ExternalLink, Loader2, QrCode, Search } from "lucide-react";
+import { Contact, Loader2, Phone, QrCode, Search } from "lucide-react";
+import { phoneLink } from "../services/phoneLink";
 
 interface AllcardsProps {}
 
@@ -113,12 +114,10 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
 
                     <div className="my-3 flex justify-center gap-2">
                       <a
-                        href="https://ivankuper.netlify.app/"
-                        target="_blank"
-                        rel="noreferrer"
+                        href={phoneLink(card.business_phone)}
                         className="flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
                       >
-                        <ExternalLink size={14} /> Visit Website
+                        <Phone size={14} /> Call
                       </a>
                       <button
                         onClick={() => setQrCard(card)}
@@ -161,7 +160,7 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
       </div>
       {qrCard ? (
         <QrModal
-          value={qrCard.business_phone}
+          value={phoneLink(qrCard.business_phone)}
           title={qrCard.business_name}
           onClose={() => setQrCard(null)}
         />

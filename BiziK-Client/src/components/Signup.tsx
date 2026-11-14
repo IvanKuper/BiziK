@@ -176,7 +176,7 @@ const Signup: FunctionComponent<SignupProps> = () => {
               id="subscribe"
               name="subscribe"
             />
-            Swipe right if You are business
+            I'm a business and want to create cards
           </label>
 
           <p className="pt-2 text-center text-sm text-slate-500 dark:text-slate-400">

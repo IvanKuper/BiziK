@@ -119,7 +119,7 @@ const Newcard: FunctionComponent<NewcardProps> = () => {
                   htmlFor="business_image_file"
                   className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300"
                 >
-                  Image
+                  Image (required)
                 </label>
                 <div className="flex gap-2">
                   <input

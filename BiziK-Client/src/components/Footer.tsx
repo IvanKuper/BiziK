@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { Camera, Code2, Link as LinkIcon } from "lucide-react";
+import { Code2, Link as LinkIcon } from "lucide-react";
 
 interface FooterProps {}
 
@@ -13,6 +13,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
         <a
           className="text-slate-500 transition-colors hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
           href="https://www.linkedin.com/in/ivankuper/"
+          aria-label="LinkedIn"
           target="_blank"
           rel="noreferrer"
         >
@@ -21,18 +22,11 @@ const Footer: FunctionComponent<FooterProps> = () => {
         <a
           className="text-slate-500 transition-colors hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
           href="https://github.com/IvanKuper"
+          aria-label="GitHub"
           target="_blank"
           rel="noreferrer"
         >
           <Code2 size={20} />
-        </a>
-        <a
-          className="text-slate-500 transition-colors hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
-          href="https://www.linkedin.com/in/ivankuper/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Camera size={20} />
         </a>
       </div>
 
@@ -40,7 +34,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
         All rights reserved {new Date().getFullYear()} ©{" "}
         <a
           className="font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-          href="https://ivankuper.netlify.app/"
+          href="https://ivankuper.github.io/"
           target="_blank"
           rel="noreferrer"
         >

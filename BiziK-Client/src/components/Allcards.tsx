@@ -54,8 +54,10 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
           <h1 className="mb-1 flex flex-wrap items-center justify-center gap-2 text-center text-2xl font-bold text-slate-800 dark:text-slate-100">
             <Contact size={26} /> All BiziK Cards
           </h1>
-          <p className="mb-6 text-center text-sm font-medium text-primary-600 dark:text-primary-400">
-            {cards.length} {cards.length === 1 ? "card" : "cards"}
+          <p className="mb-6 min-h-5 text-center text-sm font-medium text-primary-600 dark:text-primary-400">
+            {isLoading
+              ? ""
+              : `${cards.length} ${cards.length === 1 ? "card" : "cards"}`}
           </p>
 
           <div className="relative mx-auto mb-8 max-w-md">
@@ -66,6 +68,7 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
             <input
               onChange={(e) => setSearch(e.target.value)}
               type="text"
+              aria-label="Search cards"
               className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-slate-800 outline-none transition-colors focus:ring-2 focus:ring-primary-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
               placeholder="Search Card Name, Description or Address"
             />
@@ -108,9 +111,9 @@ const Cards: FunctionComponent<AllcardsProps> = () => {
                   </div>
 
                   <div className="flex flex-1 flex-col p-5">
-                    <h3 className="text-center text-lg font-bold text-slate-800 dark:text-slate-100">
+                    <h2 className="text-center text-lg font-bold text-slate-800 dark:text-slate-100">
                       {card.business_name}
-                    </h3>
+                    </h2>
 
                     <div className="my-3 flex justify-center gap-2">
                       <a

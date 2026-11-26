@@ -5,6 +5,7 @@ const logger = require("./middlewares/logger");
 const app = express();
 const PORT = process.env.PORT || 8000;
 const cors = require("cors");
+const helmet = require("helmet");
 
 // Importing Routes
 const register = require("./routes/register");
@@ -15,12 +16,8 @@ const card = require("./routes/card");
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use(logger);
-app.use((req, res, next) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "DENY");
-  res.setHeader("Referrer-Policy", "no-referrer");
-  next();
-});
+// The API only serves JSON, so cross-origin reads are allowed (CORS below decides who may call it).
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN

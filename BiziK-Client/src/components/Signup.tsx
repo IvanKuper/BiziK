@@ -73,7 +73,7 @@ const Signup: FunctionComponent<SignupProps> = () => {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary-600 via-primary-700 to-violet-800 px-4 py-12">
       <div className="animate-fade-in w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl dark:bg-slate-900">
         <Link to="/" className="flex justify-center">
-          <img className="mb-6 w-32" src="logo.png" alt="" />
+          <img className="mb-6 h-16 w-16 rounded-2xl shadow-lg" src="/icon.svg" alt="BiziK home" />
         </Link>
         <h1 className="mb-6 text-center text-2xl font-bold text-slate-800 dark:text-slate-100">
           Create Free Account Now!

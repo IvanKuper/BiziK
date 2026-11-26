@@ -1,22 +1,25 @@
+import { lazy, Suspense } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
-import About from "./components/About";
-import Signin from "./components/Signin";
-import Signup from "./components/Signup";
 import { ToastContainer } from "react-toastify";
-import Allcards from "./components/Allcards";
-import Newcard from "./components/Newcard";
-import Mycards from "./components/Mycards";
-import Editcard from "./components/Editcard";
-import Profile from "./components/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+const About = lazy(() => import("./components/About"));
+const Signin = lazy(() => import("./components/Signin"));
+const Signup = lazy(() => import("./components/Signup"));
+const Allcards = lazy(() => import("./components/Allcards"));
+const Newcard = lazy(() => import("./components/Newcard"));
+const Mycards = lazy(() => import("./components/Mycards"));
+const Editcard = lazy(() => import("./components/Editcard"));
+const Profile = lazy(() => import("./components/Profile"));
 
 function App() {
   return (
     <div className="App">
       <ToastContainer theme="colored" position="top-right" />
       <Router>
+        <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="about" element={<About />} />
@@ -57,7 +60,9 @@ function App() {
               }
             />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </Suspense>
       </Router>
     </div>
   );

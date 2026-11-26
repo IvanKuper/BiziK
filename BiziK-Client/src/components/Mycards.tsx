@@ -77,7 +77,7 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
             <Contact size={26} /> My BiziK Cards
           </h1>
           <p className="mb-6 text-center text-sm font-medium text-primary-600 dark:text-primary-400">
-            [# of cards {card.length}]
+            {card.length} {card.length === 1 ? "card" : "cards"}
           </p>
 
           <div className="relative mx-auto mb-8 max-w-md">
@@ -184,7 +184,7 @@ const Mycards: FunctionComponent<MycardsProps> = () => {
                   : "No cards have been added yet."}
               </h4>
               {!card.length ? (
-                <img className="mt-5 max-w-xs" src="nocards.png" alt="" />
+                <img className="mt-5 max-w-xs" src="/nocards.png" alt="" />
               ) : null}
             </div>
           )}

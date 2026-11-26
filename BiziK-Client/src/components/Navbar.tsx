@@ -49,7 +49,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
           className="flex items-center gap-2 text-white"
           onClick={() => setMenuOpen(false)}
         >
-          <img className="h-10 w-10 drop-shadow" src="/Logo.png" alt="logo" />
+          <img className="h-10 w-10 rounded-xl shadow-lg ring-1 ring-white/30" src="/icon.svg" alt="" />
           <span className="text-2xl font-extrabold tracking-tight drop-shadow">
             BiziK
           </span>

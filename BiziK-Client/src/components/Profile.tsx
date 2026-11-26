@@ -33,7 +33,7 @@ const Profile: FunctionComponent<ProfileProps> = () => {
           </h1>
           <div className="animate-fade-in rounded-2xl bg-white p-8 text-center shadow-sm dark:bg-slate-900">
             <img
-              src="profile1.svg"
+              src="/profile1.svg"
               alt="profile"
               className="mx-auto w-40"
             />

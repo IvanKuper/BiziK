@@ -27,7 +27,7 @@ const About: FunctionComponent<AboutProps> = () => {
             </p>
             <img
               className="mx-auto mt-6 w-full max-w-sm"
-              src="about2.svg"
+              src="/about2.svg"
               alt=""
             />
           </div>
@@ -45,7 +45,7 @@ const About: FunctionComponent<AboutProps> = () => {
             </p>
             <img
               className="mx-auto mt-6 w-full max-w-sm"
-              src="about1.svg"
+              src="/about1.svg"
               alt=""
             />
           </div>

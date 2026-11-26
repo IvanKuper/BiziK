@@ -20,10 +20,10 @@ beforeAll(() => {
     } as unknown as MediaQueryList);
 });
 
-test("guests can open the public cards directory without signing in", () => {
+test("guests can open the public cards directory without signing in", async () => {
   window.history.pushState({}, "", "/all-cards");
   render(<App />);
   expect(
-    screen.getByRole("heading", { name: /all bizik cards/i })
+    await screen.findByRole("heading", { name: /all bizik cards/i })
   ).toBeInTheDocument();
 });
